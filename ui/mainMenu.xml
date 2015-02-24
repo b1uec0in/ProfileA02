@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+		<THEME id="title" layout="300,30" textColor="#ffffff" defaultImg="#333333" minFontSize="0" fontSize="15" textAlign="left" padding="10,0,0,0" />
+		<THEME id="subBack" defaultImg="/res/back.png" />
+		<THEME id="version" textColor="#c080cfea" textAlign="right|bottom" fontSize="9" />
+	</THEMES>
+
+	<UILAYOUT portrait="300,500" landscape="300,500" theme="/theme/common.xml|theme1">
+		<WINDOW layout="0,0,0,0" onCreate="function.init" visible="invisible" />
+		<WINDOW id="bg" layout="0,0,300,500" defaultImg="/data/main1.jpg" />
+		<WINDOW id="overlay" layout="0,0,300,500" visible="invisible" />
+		<WINDOW themeId="themeBorderOverlay" layout="0,0,300,500" />
+		<WINDOW themeId="themeFlyingObj1" id="flyingObj1" />
+		<WINDOW themeId="themeFlyingObj2" id="flyingObj2" />
+		<WINDOW themeId="themeFlyingObj3" id="flyingObj3" />
+
+		<!-- 이름 -->
+		<LABEL text=" {userVariable.data.name} " themeId="themeNameLabel" layout="30,25,240,80" textColor="#80ffffff" textShadow="#80333388" minFontSize="0" textAlign="right" />
+
+		<!-- 메인 메뉴 -->
+		<BUTTON text=" {userVariable.data.menu.profile}" id="menuItem1" themeId="menuItem" layout="50,290,auto,40" fontSize="30" onClick="function.menuItemClick('profile')" />
+		<BUTTON text=" {userVariable.data.menu.gallery}" id="menuItem2" themeId="menuItem" layout="70,340,auto,40" fontSize="30" onClick="function.menuItemClick('gallery')" />
+		<BUTTON text=" {userVariable.data.menu.movie}" id="menuItem3" themeId="menuItem" layout="90,390,auto,40" fontSize="30" onClick="function.menuItemClick('movie')" />
+		<BUTTON text=" {userVariable.data.menu.link}" id="menuItem4" themeId="menuItem" layout="110,440,auto,30" onClick="function.menuItemClick2('links')" />
+
+		<!-- Links... 서브 메뉴 -->
+		<WINDOW id="subMenu" layout="0,320,300,180" visible="invisible">
+			<BUTTON id="subMenuTitle" layout="100,0,100,30" themeId="titleLabel" onClick="function.hideSubMenu" />
+			<BUTTON layout="85,3,20,24" themeId="subBack" onClick="function.hideSubMenu" />
+			<BUTTON text="{userVariable.data.link1.title}" onClick="function.webBrowser(userVariable.data.link1.link)" id="subItem1" themeId="subMenuItem" layout="110,30,100,30" onCreate="" />
+			<BUTTON text="{userVariable.data.link2.title}" onClick="function.webBrowser(userVariable.data.link2.link)" id="subItem2" themeId="subMenuItem" layout="110,60,100,30" onCreate="" />
+			<BUTTON text="{userVariable.data.link3.title}" onClick="function.webBrowser(userVariable.data.link3.link)" id="subItem3" themeId="subMenuItem" layout="110,90,100,30" onCreate="" />
+			<BUTTON text="About" onClick="container.open('about.xml', 'about')" id="subItem4" themeId="subMenuItem" layout="110,120,100,30" />
+		</WINDOW>
+
+		<!-- Change theme -->
+		<BUTTON layout="0,470,30,30" defaultImg="/res/changeTheme.png" onClick="function.changeTheme" />
+
+		<WINDOW id="mainGuideWindow" layout="30,470,240,20" visible="invisible" align="linear:center">
+			<LABEL text="메뉴를 선택해 주세요." defaultImg="#30808080" textColor="#ffffff" textAlign="center" fontSize="10" />
+		</WINDOW>
+		<LABEL themeId="version" layout="100,490,100,10" text="ver {application.versionName}" textAlign="bottom|center" />
+	</UILAYOUT>
+
+	<CMD condition="device.os.platform=='iOS'" cmd="function.updateStatusBar" />
+
+	<FUNCTION id="init">
+		<CMD cmd="userVariable.aniDelay = 0" />
+		<CMD cmd="userVariable.bgIndex = 1" />
+		<CMD cmd="function.aniBg" delay="5000" />
+		<CMD cmd="function.checkMainGuide" delay="10000" />
+		<CMD cmd="function.aniFlyingObj" delay="1000" />
+	</FUNCTION>
+	<FUNCTION id="aniMenu"> <!-- 메뉴 등장 애니메이션 -->
+		<CMD cmd="userVariable.aniDelay = userVariable.aniDelay + 1" />
+		<CMD cmd="userVariable.aniDelayTime = 1000 + 200 * userVariable.aniDelay" />
+		<CMD cmd="animation.flyIn('caller', -200,100, 100, 25, 'easeOut3', 1000, ''),animation.show('caller', 'fade', '', 1000, '')" delay="userVariable.aniDelayTime" />
+	</FUNCTION>
+	<FUNCTION id="aniBg"> <!-- 배경 자동 바뀐 애니메이션 -->
+		<CMD cmd="userVariable.bgIndex = userVariable.bgIndex + 1" />
+		<CMD condition="userVariable.bgIndex == 4" cmd="userVariable.bgIndex = 1" />
+
+		<CMD cmd="userVariable.bgImg='/data/main' + userVariable.bgIndex + '.jpg'" />
+		<CMD cmd="overlay.defaultImg= userVariable.bgImg" />
+		<CMD cmd="animation.show('overlay', 'fade', '', 2000, '')" delay="100" />
+		<CMD cmd="animation.flyIn('overlay', 20,20,260,460, '', 1000, '')" delay="100" />
+		<CMD cmd="bg.defaultImg=userVariable.bgImg" delay="2200" />
+		<CMD cmd="overlay.visible='invisible'" delay="2300" />
+		<CMD cmd="function.aniBgCheck" delay="7000" />
+	</FUNCTION>
+	<FUNCTION id="aniBgCheck"> <!-- 메뉴 애니매이션 도중에는 aniBg 가 동작하지 않도록 한다. -->
+		<CMD condition="userVariable.stopBgAni=='true'" cmd="function.aniBgCheck" delay="7000" />
+		<CMD condition="userVariable.stopBgAni!='true'" cmd="function.aniBgCheck2" />
+	</FUNCTION>
+	<FUNCTION id="aniBgCheck2">
+		<!-- main 화면이 아닌 다른 화면으로 이동한 경우에는 aniBg가 동작하지 않도록 한다. -->
+		<CMD condition="document.container.selectedItem!='mainMenu'" cmd="function.aniBgCheck" delay="7000" />
+		<CMD condition="document.container.selectedItem=='mainMenu'" cmd="function.aniBg" />
+	</FUNCTION>
+	<FUNCTION id="aniFlyingObj">
+		<CMD cmd="flyingObj1.visible='visible'" />
+		<CMD cmd="flyingObj2.visible='visible'" />
+		<CMD cmd="flyingObj3.visible='visible'" />
+		<CMD cmd="animation.flyOut('flyingObj1', -400,200, 20, 20, 'easeIn3', 3000, '')" delay="0" />
+		<CMD cmd="animation.flyOut('flyingObj2', -400,200, 10, 10, 'easeIn3', 2000, '')" delay="400" />
+		<CMD cmd="animation.flyOut('flyingObj3', -400,200, 15, 15, 'easeIn3', 1500, '')" delay="0" />
+		<!-- 꽃모양만 rotate="true" 를 줘서 회전 시킨다. -->
+		<CMD condition="flyingObj1.rotate=='true'" cmd="animation.rotate('flyingObj1',720, 50, 50, 'easeIn3', 3000, '')" delay="0" />
+		<CMD condition="flyingObj2.rotate=='true'" cmd="animation.rotate('flyingObj2',360, 10, 10, '', 2000, '')" delay="400" />
+		<CMD condition="flyingObj3.rotate=='true'" cmd="animation.rotate('flyingObj3',540, 20, 20, '', 1500, '')" delay="0" />
+		<CMD cmd="function.aniFlyingObj" delay="15000" />
+
+		<CMD cmd="userVariable.stopBgAni='true'" />
+		<CMD cmd="userVariable.stopBgAni='false'" delay="3100" />
+	</FUNCTION>
+	<FUNCTION id="checkMainGuide">
+		<CMD condition="userVariable.mainGuide!='false'" cmd="function.showMainGuide" />
+	</FUNCTION>
+	<FUNCTION id="showMainGuide"> <!-- 메뉴를 누르지 않으면 깜빡 거리면서 안내말을 표시한다. -->
+		<CMD cmd="menuItem1.textColor='#aabbee'" />
+		<CMD cmd="menuItem1.textColor='#ffffff'" delay="300" />
+		<CMD cmd="menuItem1.textColor='#aabbee'" delay="600" />
+		<CMD cmd="menuItem1.textColor='#ffffff'" delay="900" />
+
+		<CMD cmd="menuItem2.textColor='#aabbee'" />
+		<CMD cmd="menuItem2.textColor='#ffffff'" delay="300" />
+		<CMD cmd="menuItem2.textColor='#aabbee'" delay="600" />
+		<CMD cmd="menuItem2.textColor='#ffffff'" delay="900" />
+
+		<CMD cmd="menuItem3.textColor='#aabbee'" />
+		<CMD cmd="menuItem3.textColor='#ffffff'" delay="300" />
+		<CMD cmd="menuItem3.textColor='#aabbee'" delay="600" />
+		<CMD cmd="menuItem3.textColor='#ffffff'" delay="900" />
+
+		<CMD cmd="mainGuideWindow.visible = 'visible'" delay="1000" />
+		<CMD cmd="function.checkMainGuide" delay="10000" />
+	</FUNCTION>
+
+	<FUNCTION id="menuItemClick(item)"> <!-- 화면 전환 전 메인 메뉴 사라지기 애니메이션 -->
+		<CMD cmd="userVariable.stopBgAni='true'" />
+		<CMD cmd="userVariable.stopBgAni='false'" delay="3000" />
+
+		<CMD cmd="mainGuideWindow.visible = 'invisible'" />
+		<CMD cmd="userVariable.mainGuide='false'" />
+		<CMD cmd="userVariable.navTitle=caller.text" />
+		<CMD cmd="animation.flyOut('caller', 90 -caller.left,-caller.top + 10 + userVariable.sbHeight, caller.width * 3/ 4, 30, 'easeIn3', 1000, 'function.document.document.showNavTitle')" />
+		<CMD condition="caller.fullPathId != menuItem1.fullPathId" cmd="animation.flyOut('menuItem1', 220,0, 100, 30, 'easeIn3', 500, '')" delay="200" />
+		<CMD condition="caller.fullPathId != menuItem2.fullPathId" cmd="animation.flyOut('menuItem2', 220,0, 100, 30, 'easeIn3', 500, '')" delay="300" />
+		<CMD condition="caller.fullPathId != menuItem3.fullPathId" cmd="animation.flyOut('menuItem3', 220,0, 100, 30, 'easeIn3', 500, '')" delay="500" />
+		<CMD condition="caller.fullPathId != menuItem4.fullPathId" cmd="animation.flyOut('menuItem4', 220,0, 100, 30, 'easeIn3', 500, '')" delay="700" />
+		<CMD cmd="userVariable.navItem = item" />
+		<CMD cmd="document.container.selectedItem = userVariable.navItem" delay="1200" />
+		<CMD cmd="menuItem1.visible='visible'" delay="4000" />
+		<CMD cmd="menuItem2.visible='visible'" delay="4000" />
+		<CMD cmd="menuItem3.visible='visible'" delay="4000" />
+		<CMD cmd="menuItem4.visible='visible'" delay="4000" />
+
+	</FUNCTION>
+	<FUNCTION id="menuItemClick2(item)"> <!-- 서브 메뉴 보여주기전 메인 메뉴 사라지기 애니메이션 -->
+		<CMD cmd="userVariable.stopBgAni='true'" />
+		<CMD cmd="userVariable.stopBgAni='false'" delay="2000" />
+
+		<CMD cmd="mainGuideWindow.visible = 'invisible'" />
+		<CMD cmd="userVariable.mainGuide='false'" />
+		<CMD cmd="userVariable.navTitle=caller.text" />
+		<CMD cmd="animation.flyOut('caller', 100 -caller.left,-120, caller.width, caller.height, 'easeIn3', 1000, 'function.showSubMenu')" />
+		<CMD condition="caller.fullPathId != menuItem1.fullPathId" cmd="animation.flyOut('menuItem1', 220,0, 100, 30, 'easeIn3', 500, '')" delay="200" />
+		<CMD condition="caller.fullPathId != menuItem2.fullPathId" cmd="animation.flyOut('menuItem2', 220,0, 100, 30, 'easeIn3', 500, '')" delay="300" />
+		<CMD condition="caller.fullPathId != menuItem3.fullPathId" cmd="animation.flyOut('menuItem3', 220,0, 100, 30, 'easeIn3', 500, '')" delay="500" />
+		<CMD condition="caller.fullPathId != menuItem4.fullPathId" cmd="animation.flyOut('menuItem4', 220,0, 100, 30, 'easeIn3', 500, '')" delay="700" />
+	</FUNCTION>
+	<FUNCTION id="showSubMenu">
+		<CMD cmd="subMenuTitle.text=userVariable.navTitle" />
+		<CMD cmd="subItem1.visible='invisible'" />
+		<CMD cmd="subItem2.visible='invisible'" />
+		<CMD cmd="subItem3.visible='invisible'" />
+		<CMD cmd="subItem4.visible='invisible'" />
+		<CMD cmd="subMenu.visible='visible'" />
+		<CMD cmd="animation.flyIn('subItem1', 0,300,100,30, 'easeOut3', 400, '')" delay="100" />
+		<CMD cmd="animation.flyIn('subItem2', 0,300,100,30, 'easeOut3', 400, '')" delay="200" />
+		<CMD cmd="animation.flyIn('subItem3', 0,300,100,30, 'easeOut3', 400, '')" delay="300" />
+		<CMD cmd="animation.flyIn('subItem4', 0,300,100,30, 'easeOut3', 400, '')" delay="400" />
+	</FUNCTION>
+	<FUNCTION id="hideSubMenu">
+		<CMD cmd="animation.polyOut('subMenu', -50,80,-300,0,-50,-80,-300,0, 'easeIn3', 500, '')" />
+		<CMD cmd="animation.flyIn('menuItem1', 0,300,100,30, 'easeOut3', 400, '')" delay="500" />
+		<CMD cmd="animation.flyIn('menuItem2', 0,300,100,30, 'easeOut3', 400, '')" delay="600" />
+		<CMD cmd="animation.flyIn('menuItem3', 0,300,100,30, 'easeOut3', 400, '')" delay="700" />
+		<CMD cmd="animation.flyIn('menuItem4', 0,300,100,30, 'easeOut3', 400, '')" delay="800" />
+	</FUNCTION>
+
+	<FUNCTION id="changeTheme">
+		<CMD condition="application.themeSrc=='theme/black/theme.xml'" cmd="application.loadTheme('theme/white/theme.xml')" elseCmd="application.loadTheme('theme/black/theme.xml')" />
+		<CMD condition="device.os.platform=='iOS'" cmd="function.updateStatusBar" />
+	</FUNCTION>
+
+	<FUNCTION id="updateStatusBar">
+		<CMD condition="application.themeSrc=='theme/black/theme.xml'" cmd="device.statusBar.setStatusBarStyle('light')" elseCmd="device.statusBar.setStatusBarStyle('default')" />
+	</FUNCTION>
+
+	<FUNCTION id="webBrowser(url)"> <!-- 웹페이지 팝업 -->
+		<CMD cmd="userVariable.linkTitle=caller.text" />
+		<CMD cmd="userVariable.linkUrl=url" />
+		<CMD cmd="container.open('webBrowser.xml', 'webBrowser')" />
+	</FUNCTION>
+	<FUNCTION id="kakaoLink(appId, msg, url)">  <!-- 카톡으로 링크 보내기 -->
+		<CMD cmd="appLauncher.openUri('kakaolink://sendurl?appid=' +appId + '&amp;appver='+ application.version + '&amp;msg=' + msg + '&amp;url=' + url, '')" />
+	</FUNCTION>
+	<FUNCTION id="smsLink(msg, url)"> <!-- SMS로 링크 보내기 -->
+		<CMD cmd="device.sms('', msg + '\n' + url, '')" />
+	</FUNCTION>
+</MOML>

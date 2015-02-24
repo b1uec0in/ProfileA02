@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+		<THEME id="guideText" textColor="#ffffff" minFontSize="0" fontSize="13" textAlign="center" multiLine="false" />
+	</THEMES>
+	
+	<UILAYOUT portrait="280,400" landscape="280,400" theme="theme1">
+		<GALLERY id="gallery1" layout="0,0,280,400" dataSource="{userVariable.galleryData}" dataList="/FILES/FILE" imagePath="@path" previewStyle="thumbnail" scaleType="fit" defaultImg="#80ffffff" />
+		<WINDOW themeId="themeBorderOverlay" layout="0,0,280,400" />
+		<WINDOW id="guideSwipe" layout="0,50,280,200" defaultImg="/res/guideSwipeScreen.png">
+			<LABEL themeId="guideText" text="좌우로 움직여 보세요" layout="0,0,280,50" />
+		</WINDOW>
+		<!--
+			<BUTTON layout="250,10,30,30" text="[#]" onClick="function.wallpaper"/>
+		-->
+	</UILAYOUT>
+
+	<CMD cmd="function.guide" />
+
+	<FUNCTION id="askWallpaper">
+		<CMD cmd="userVariable.wallpaperPath=xpath.evaluateEx(userVariable.galleryData, '/FILES/FILE[' + math.add(gallery1.index,1) + ']/@path')" delay="0" />
+		<CMD cmd="device.systemPopup('', '이미지를 저장 합니다.', '갤러리에 저장:function.gallery', '배경화면 지정:function.wallpaper', '취소')" />
+	</FUNCTION>
+	<FUNCTION id="wallpaper">
+		<CMD cmd="wallpaper.setWallpaper(userVariable.wallpaperPath)" />
+	</FUNCTION>
+	<FUNCTION id="gallery">
+		<CMD cmd="wallpaper.saveToGallery(userVariable.wallpaperPath, 'Profile')" />
+	</FUNCTION>
+	<FUNCTION id="guide">
+		<CMD cmd="guideSwipe.visible='invisible'" />
+		<CMD condition="!userVariable.guideGallery" cmd="function.guideAni" />
+	</FUNCTION>
+	<FUNCTION id="guideAni">
+		<CMD cmd="userVariable.guideGallery='true'" />
+		<CMD cmd="animation.hide('guideSwipe', 'fade', 'roundTrip1|reverse|easeIn3', 2000, '')" delay="1500" />
+	</FUNCTION>
+</MOML>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+		<THEME id="tab" parent="themeTab" groupId="tab1" fontFace="/res/EunjinNakseo.ttf" style="button" layout="80,30" textShadow="#3300ff" defaultImg="/res/lineartGoldBorderDisabled.png" checkedImg="/res/lineartGoldBorderSelected.png"
+			minFontSize="0" fontSize="13" textAlign="center" multiLine="false" visible="invisible" />
+	</THEMES>
+
+	<UILAYOUT portrait="300,500" landscape="300,500" theme="/theme/common.xml|theme1">
+		<WINDOW themeId="themeBg2" layout="0,0,300,500" />
+		<WINDOW id="navTitleBar" layout="0,userVariable.sbHeight,300,30" visible="invisible">
+			<WINDOW id="navTitleBorder" layout="0,15,300,30" visible="invisible" />
+			<LABEL id="navTitle" layout="90,0,120,30" themeId="titleLabel" text=" {userVariable.data.menu.gallery}" />
+		</WINDOW>
+		<BUTTON themeId="navBack" />
+		<WINDOW layout="10,30+userVariable.sbHeight,260,30" align="linear">
+			<RADIO id="radio1" themeId="tab" text="{userVariable.data.gallery.tab1}" selected="true" onClick="function.loadGallery('/data/gallery1')" />
+			<RADIO id="radio2" themeId="tab" text="{userVariable.data.gallery.tab2}" onClick="function.loadGallery('/data/gallery2')" />
+			<RADIO id="radio3" themeId="tab" text="{userVariable.data.gallery.tab3}" onClick="function.loadGallery('/data/gallery3')" />
+		</WINDOW>
+
+		<WINDOW layout="10,60+userVariable.sbHeight,280,430-userVariable.sbHeight">
+			<CONTAINER id="gallery1" themeId="galleryContainer" layout="0,0,280,parent.height" onCreate="function.loadGallery('/data/gallery1')" />
+		</WINDOW>
+
+		<!-- 이미지 다운로드 버튼 -->
+		<BUTTON layout="270,userVariable.sbHeight,30,30" defaultImg="/res/download.png" onClick="function.gallery1.askWallpaper" onCreate="function.buttonGuide" />
+	</UILAYOUT>
+
+	<CMD cmd="(navTitleBar.visible='visible'), function.document.document.hideNavTitle" delay="2000" />
+	<CMD cmd="function.aniRadio" delay="2000" />
+
+	<FUNCTION id="aniRadio">
+		<CMD cmd="animation.flyIn('radio1', 100,50,80,30,'easeOut3', 600, '')" delay="200" />
+		<CMD cmd="animation.flyIn('radio2', 100,50,80,30,'easeOut3', 600, '')" delay="400" />
+		<CMD cmd="animation.flyIn('radio3', 100,50,80,30,'easeOut3', 600, '')" delay="600" />
+	</FUNCTION>
+	<FUNCTION id="buttonGuide">
+		<CMD cmd="animation.flyOut('caller', -5, -5, caller.width+10,caller.height+10, 'roundTrip', 400, 'caller.visible=\'visible\'')" delay="4000" />
+		<CMD cmd="animation.flyOut('caller', -3, -3, caller.width+6,caller.height+6, 'roundTrip', 400, 'caller.visible=\'visible\'')" delay="4400" />
+	</FUNCTION>
+	<FUNCTION id="containerFile">
+		<CMD condition="gallery1.type=='coverflow' || device.os.platform=='iOS'" cmd="'coverflowContainer.xml'" elseCmd="'galleryContainer.xml'" />
+	</FUNCTION>
+	<FUNCTION id="loadGallery(dataDir)">
+		<CMD cmd="userVariable.galleryDataDir=dataDir" />
+		<_CMD cmd="userVariable.galleryData=file.dir(userVariable.galleryDataDir, 'jpg|png', '')" />
+		<CMD cmd="userVariable.galleryData=file.read(userVariable.galleryDataDir + '/data.xml')" />
+		<CMD cmd="gallery1.src=function.containerFile" />
+	</FUNCTION>
+</MOML>

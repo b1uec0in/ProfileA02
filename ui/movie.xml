@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+		<THEME id="videoButton" layout="40,40" defaultImg="#00000000" margin="10,0,0,10" textColor="#ffffff" textShadow="#333333" pressedImg="#408080bb" minFontSize="0" fontSize="20" textAlign="center" />
+		<THEME id="previewBtn" layout="0,0,300,60" defaultImg="#00000000" pressedImg="#607080ee" align="linear:subCenter" visible="invisible" onCreate="function.aniTableRow" />
+		<THEME id="previewImg" layout="60,50" margin="5,5,5,5" />
+		<THEME id="previewText" layout="220,40" margin="5,5,5,5" fontFace="/res/EunjinNakseo.ttf" textColor="#ffffff" textShadow="#333333" minFontSize="0" fontSize="12" />
+		<THEME id="splitter" layout="200,1px" defaultImg="#40ccccff" margin="60,0,0,0" />
+	</THEMES>
+
+	<UILAYOUT portrait="300,500" landscape="300,500" theme="/theme/common.xml|theme1">
+		<WINDOW themeId="themeBg1" layout="0,0,300,500" onCreate="function.init" />
+		<WINDOW id="navTitleBar" layout="0,userVariable.sbHeight,300,30" visible="invisible">
+			<WINDOW id="navTitleBorder" layout="0,0,300,30" visible="invisible" />
+			<LABEL id="navTitle" layout="90,0,120,30" themeId="titleLabel" text=" {userVariable.data.menu.movie}" />
+		</WINDOW>
+		<BUTTON themeId="navBack" />
+
+		<WINDOW layout="10,30+userVariable.sbHeight,280,280-userVariable.sbHeight" align="linear:vertical">
+			<VIDEO id="video" layout="280,240-userVariable.sbHeight" src="/data/movie/1.mp4" autoPlay="false" />
+			<WINDOW layout="280,40" align="linear">
+				<BUTTON themeId="videoButton" defaultImg="/res/rightArrow.png" onClick="video.play()" />
+				<BUTTON themeId="videoButton" defaultImg="/res/pause.png" onClick="video.pause()" />
+				<BUTTON themeId="videoButton" defaultImg="/res/stop.png" onClick="video.stop()" />
+			</WINDOW>
+		</WINDOW>
+		<LIST layout="10,310,290,170" defaultImg="#40808080" _dataSource="{file.dir('/data/movie', 'mp4|avi', '')}" dataSource="/data/movie/files.xml" dataList="/FILES/FILE">
+			<LISTLAYOUT>
+				<BUTTON themeId="previewBtn" onClick="function.videoPlay(xpath.evaluate('@path'))">
+					<IMAGE themeId="previewImg" defaultImg="{file.folderFileName(xpath.evaluate('@path')) + '.jpg'}" />
+					<LABEL themeId="previewText" text="{file.read(file.folderFileName(xpath.evaluate('@path')) + '.txt')}" />
+				</BUTTON>
+			</LISTLAYOUT>
+		</LIST>
+	</UILAYOUT>
+
+	<CMD cmd="(navTitleBar.visible='visible'), function.document.document.hideNavTitle" delay="2000" />
+
+	<FUNCTION id="init">
+		<CMD cmd="userVariable.aniCount = 0" />
+	</FUNCTION>
+
+	<FUNCTION id="videoPlay(src)">
+		<CMD cmd="video.stop" />
+		<CMD cmd="video.src=src" />
+		<CMD cmd="video.play" />
+	</FUNCTION>
+
+	<FUNCTION id="aniTableRow">
+		<CMD cmd="userVariable.aniCount = math.add(userVariable.aniCount, 1)" />
+		<CMD cmd="userVariable.aniDelay = 500 + userVariable.aniCount * 600" />
+		<CMD cmd="animation.flyIn('caller', 300,0,300,0,'easeOut3', 500, '')" delay="userVariable.aniDelay" />
+		<CMD cmd="animation.show('caller', 'fade','easeOut3', 700, '')" delay="userVariable.aniDelay" />
+	</FUNCTION>
+
+
+
+</MOML>

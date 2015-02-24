@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+		<THEME id="splitter" layout="220,2px" defaultImg="#80808080" margin="10,0,0,0"/>
+		<THEME id="label1" parent="themeInfoText" fontSize="15" />
+		<THEME id="tr" layout="240,28" align="linear" visible="invisible" onCreate="function.aniTableRow"/>
+		<THEME id="td1" parent="label1" layout="80,28" textAlign="center"/>
+		<THEME id="td2" parent="label1" layout="160,28" textAlign="left|center" padding="10,0,0,0"/>
+	</THEMES>
+		<FUNCTION id="init">
+			<CMD cmd="container.aniCount = 0"/>
+		</FUNCTION>
+		<FUNCTION id="aniTableRow">
+			<CMD cmd="container.aniCount = math.add(container.aniCount, 1)"/>
+			<CMD cmd="container.aniDelay = 500 + math.mul(container.aniCount, 100)"/>
+			<CMD cmd="animation.flyIn('caller', 0,20,240,30,'easeOut3', 500, '')" delay="container.aniDelay"/>
+			<CMD cmd="animation.show('caller', 'fade','easeOut3', 500, '')" delay="container.aniDelay"/>
+		</FUNCTION>
+
+
+		<UILAYOUT portrait="240,180" landscape="240,180" theme="theme1">
+			<WINDOW layout="0,0,240,180" align="linear:vertical" scroll="vertical" onCreate="function.init">
+			<WINDOW layout="240,auto" align="linear:vertical">
+				<WINDOW themeId="tr">
+					<LABEL themeId="td1" text="???? ~ ????"/>
+					<LABEL themeId="td2" text="영국 대학교  학사"/>
+				</WINDOW>
+				<WINDOW themeId="splitter" />
+				<WINDOW themeId="tr">
+					<LABEL themeId="td1" text="???? ~ ????"/>
+					<LABEL themeId="td2" text="영국 고등학교"/>
+				</WINDOW>
+				<WINDOW themeId="splitter" />
+				<WINDOW themeId="tr">
+					<LABEL themeId="td1" text="???? ~ ????"/>
+					<LABEL themeId="td2" text="영국 중학교"/>
+				</WINDOW>
+				<WINDOW themeId="splitter" />
+				<WINDOW themeId="tr">
+					<LABEL themeId="td1" text="???? ~ ????"/>
+					<LABEL themeId="td2" text="영국 초등학교"/>
+				</WINDOW>
+				<WINDOW themeId="splitter" />
+			</WINDOW>
+			</WINDOW>
+		</UILAYOUT>
+</MOML>

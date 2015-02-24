@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+		<THEME id="splitter" layout="280,1px" defaultImg="#333333" margin="10,0,0,0" />
+		<THEME id="title" layout="300,30" textColor="#ffffff" defaultImg="#333333" minFontSize="0" fontSize="15" textAlign="left" padding="10,0,0,0" />
+		<THEME id="infoLabel" textColor="#eebbaa" textShadow="#333333" defaultImg="#00000000" minFontSize="0" fontSize="12" textAlign="left" multiLine="true" />
+		<THEME id="tab" parent="themeTab" groupId="tab1" fontFace="/res/EunjinNakseo.ttf" style="button" layout="80,30" textShadow="#333333" defaultImg="/res/lineartGoldBorderDisabled.png" checkedImg="/res/lineartGoldBorderSelected.png"
+			minFontSize="0" fontSize="13" textAlign="center" multiLine="true" />
+	</THEMES>
+
+	<UILAYOUT portrait="300,500" landscape="300,500" theme="/theme/common.xml|theme1">
+		<WINDOW themeId="themeBg2" layout="0,0,300,500" onDestroy="function.stopBgm" />
+		<WINDOW id="navTitleBar" layout="0,userVariable.sbHeight,300,30" visible="invisible">
+			<WINDOW id="navTitleBorder" layout="0,0,300,30" visible="invisible" />
+			<LABEL id="navTitle" layout="90,0,120,30" themeId="titleLabel" text=" {userVariable.data.menu.profile}" />
+		</WINDOW>
+		<BUTTON themeId="navBack" />
+
+		<BUTTON id="bgm" layout="270,userVariable.sbHeight,30,30" defaultImg="/res/pause.png" onClick="function.toggleBgm" onCreate="function.buttonGuide" />
+
+		<!-- 프로필 사진 -->
+		<WINDOW layout="10,40,110,140" defaultImg="/res/shadowWhiteBg.png" align="linear:center">
+			<WINDOW layout="90,120" defaultImg="/data/profile.jpg" />
+		</WINDOW>
+
+		<!-- info.txt -->
+		<WINDOW layout="120,60,170,140" scroll="vertical">
+			<LABEL id="infoText" themeId="infoLabel" textColor="#abcdef" layout="0,0,170,140" text="{file.read('/data/info.txt')}" visible="invisible" />
+		</WINDOW>
+		<!-- info2.txt -->
+		<WINDOW layout="10,180,280,140" scroll="vertical">
+			<LABEL id="infoText2" themeId="infoLabel" textColor="#fd8a84" fontFace="/res/EunjinNakseo.ttf" layout="0,0,280,140" text="{file.read('/data/info2.txt')}" visible="invisible" />
+		</WINDOW>
+
+		<WINDOW layout="20,320,260,160">
+			<WINDOW layout="0,0,260,30" align="linear">
+				<RADIO themeId="tab" text="{userVariable.data.info.tab1}" selected="true" onClick="infoCon.src='/data/infoTab1.xml'" />
+				<RADIO themeId="tab" text="{userVariable.data.info.tab2}" onClick="infoCon.src='/data/infoTab2.xml'" />
+				<RADIO themeId="tab" text="{userVariable.data.info.tab3}" onClick="infoCon.src='/data/infoTab3.xml'" />
+			</WINDOW>
+			<CONTAINER id="infoCon" layout="0,30,240,130" src="/data/infoTab1.xml" />
+		</WINDOW>
+	</UILAYOUT>
+
+	<CMD cmd="(navTitleBar.visible='visible'), function.document.document.hideNavTitle" delay="2000" />
+	<CMD cmd="function.infoAni" delay="2000" />
+	<CMD cmd="userVariable.bgm1 = sound.createSound('/data/MC Ballad U Outside.mp3', 'autoPlay:true|loop:true|shareResource:true' ,'function.checkBgm')" delay="1500" />
+
+	<FUNCTION id="init">
+		<CMD cmd="userVariable.aniDelay = 0" />
+	</FUNCTION>
+	<FUNCTION id="infoAni">
+		<CMD cmd="userVariable.infoText=infoText.text" />
+		<CMD cmd="userVariable.infoTextPos=0" />
+		<CMD cmd="infoText.text=''" />
+		<CMD cmd="infoText.visible='visible'" />
+		<CMD cmd="animation.show('infoText', 'fade', '', 3000, '')" />
+		<CMD cmd="function.infoAniLoop" />
+	</FUNCTION>
+	<FUNCTION id="infoAniLoop">
+		<CMD cmd="infoText.text=string.sub(userVariable.infoText, 0, userVariable.infoTextPos)" />
+		<CMD cmd="userVariable.infoTextPos = userVariable.infoTextPos + 1" />
+		<CMD condition="userVariable.infoTextPos &lt;= string.len(userVariable.infoText)" cmd="function.infoAniLoop" elseCmd="function.info2Ani" delay="30" />
+	</FUNCTION>
+
+	<FUNCTION id="info2Ani">
+		<CMD cmd="userVariable.infoText2=infoText2.text" />
+		<CMD cmd="userVariable.infoText2Pos=0" />
+		<CMD cmd="infoText2.text=''" />
+		<CMD cmd="infoText2.visible='visible'" />
+		<CMD cmd="function.info2AniLoop" />
+	</FUNCTION>
+	<FUNCTION id="info2AniLoop">
+		<CMD cmd="infoText2.text=string.sub(userVariable.infoText2, 0, userVariable.infoText2Pos)" />
+		<CMD cmd="userVariable.infoText2Pos = userVariable.infoText2Pos + 1" />
+		<CMD condition="userVariable.infoText2Pos &lt;= string.len(userVariable.infoText2)" cmd="function.info2AniLoop" delay="60" />
+	</FUNCTION>
+
+	<FUNCTION id="toggleBgm">
+		<CMD condition="sound.isPlay(userVariable.bgm1)" cmd="sound.pause(userVariable.bgm1)" elseCmd="sound.play(userVariable.bgm1)" />
+		<CMD cmd="function.checkBgm" />
+	</FUNCTION>
+	<FUNCTION id="checkBgm">
+		<CMD condition="sound.isPlay(userVariable.bgm1)" cmd="bgm.defaultImg='/res/pause.png'" elseCmd="bgm.defaultImg='/res/rightArrow.png'" />
+	</FUNCTION>
+	<FUNCTION id="stopBgm">
+		<CMD cmd="sound.stop(userVariable.bgm1)" />
+	</FUNCTION>
+	<FUNCTION id="buttonGuide">
+		<CMD cmd="animation.flyOut('caller', -5, -5, caller.width+10,caller.height+10, 'roundTrip', 400, 'caller.visible=\'visible\'')" delay="2000" />
+		<CMD cmd="animation.flyOut('caller', -3, -3, caller.width+6,caller.height+6, 'roundTrip', 400, 'caller.visible=\'visible\'')" delay="2400" />
+	</FUNCTION>
+</MOML>

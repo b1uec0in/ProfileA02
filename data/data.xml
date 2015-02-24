@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DATA>
+	<!-- 첫 화면 우측 상단에 표시되는 이름 -->
+	<NAME value="Joan"/>
+
+	<!-- 첫 화면 메뉴 이름 -->
+	<MENUS>
+		<PROFILE value="Who am I?"/> <!-- ex) 소개, Profile, Information, Who am I?, About Me, -->
+		<GALLERY value="Gallery"/> <!-- ex) 사진들, Gallery, Images, -->
+		<MOVIE value="Movies"/> <!-- ex) 동영상, Movies, Videos, -->
+		<LINK value="Links..."/>
+	</MENUS>
+
+	<!-- 서브 메뉴 링크들 -->
+	<!-- ex) 홈페이지, 트위터, 페이스북, 다음카페, 블로그, 유튜브, 사이월드, 미투데이, -->
+	<LINK1 title="Twitter" link="https://twitter.com/missA_suzy"/>
+	<LINK2 title="Facebook" link="https://www.facebook.com/pledisAS"/>
+	<LINK3 title="You Tube" link="http://www.youtube.com/leehyoriofficial"/>
+
+	<!-- Info tab -->
+	<!-- ex) 개인 프로필: 학력사항, 경력사항, 수상내역, 광고출연, 아마추어활동, 기타, -->
+	<!-- ex) 음식점: 식사메뉴, 안주메뉴, 요리, 음료, History,  -->
+	<!-- ex) 스포츠센터: 운영시간, 이용 요금, 연혁-->
+	<INFO tab1="학력사항" tab2="경력사항" tab3="수상내역"/>
+	
+	<!-- Gallery tab -->
+	<!-- ex) 개인 프로필: 작품활동, 여행사진, 실내에서, 야외에서, 일상, 친구들, 가족, 색다른 모습, -->
+	<!-- ex) 음식점: 인테리어, 추천메뉴, 기사모음, 주방, 홀, -->
+	<!-- ex) 스포츠센터: 강사진, 시설, 인테리어, 수업, -->
+	<GALLERY tab1="유명한 사진" tab2="야외에서" tab3="분위기있는"/>
+</DATA>

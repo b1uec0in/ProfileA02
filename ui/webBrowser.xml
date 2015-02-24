@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+	</THEMES>
+	<UILAYOUT portrait="300,500" landscape="300,500" theme="/theme/common.xml|theme1">
+		<POPUP layout="0,0,300,500" showEffect="slide:400,left" hideEffect="slide:400,down">
+			<WINDOW themeId="themeBg1" layout="0,0,300,500" />
+			<WINDOW id="navTitleBar" layout="0,userVariable.sbHeight,300,30">
+				<LABEL id="navTitle" layout="50,0,200,30" themeId="titleLabel" text="{userVariable.linkTitle}" textAlign="center" />
+			</WINDOW>
+			<BUTTON themeId="navBack" onClick="container.close" />
+			<!-- 새창으로 띄우기 -->
+			<BUTTON layout="270,userVariable.sbHeight,30,30" defaultImg="/res/internet.png" onClick="appLauncher.openUri(userVariable.linkUrl, '')" />
+			<WEBVIEW layout="0,30+userVariable.sbHeight,300,470-userVariable.sbHeight" align="linear" src="{userVariable.linkUrl}" controls="none" supportZoom="true" />
+		</POPUP>
+	</UILAYOUT>
+</MOML>

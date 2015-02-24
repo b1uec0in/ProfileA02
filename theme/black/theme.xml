@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.0">
+	<!-- 메인 화면-->
+	<THEME id="themeNameLabel"  fontFace="/theme/black/DancingScript.ttf|serif" fontSize="40" />
+	<THEME id="themeTitleLabel"  fontFace="/theme/black/Playball.ttf|serif" />
+	<THEME id="themeBorderOverlay"  defaultImg="/theme/black/border5.png" />
+	
+	<!-- 메인 화면 날리는 개체-->
+	<THEME id="themeFlyingObj1"  defaultImg="/theme/black/flareBlue.png" layout="300,0,50,50" />
+	<THEME id="themeFlyingObj2"  defaultImg="/theme/black/flareRed.png" layout="300,100,50,50" />
+	<THEME id="themeFlyingObj3"  defaultImg="/theme/black/flareYellow.png" layout="300,200,50,50"/>
+	
+	<!-- 하위 메뉴 화면-->
+	<THEME id="themeBg1" defaultImg="/theme/black/bg1.jpg"/> <!-- 진한 배경 -->
+	<THEME id="themeBg2" defaultImg="/theme/black/bg2.jpg"/> <!-- 옅은 배경 -->
+	<THEME id="themeTab" textColor="#eebbaa" fontStyle="bold"/>
+	<THEME id="themeInfoText" textColor="#ee88aa" />
+	
+	<!-- About 화면-->
+	<THEME id="themeAboutTitleText" textColor="#66d0fb" fontSize="13" textShadow="#807060" />
+	<THEME id="themeAboutText" textColor="#e8d0fb" fontFace="/res/EunjinNakseo.ttf" fontSize="11" />
+	<THEME id="themeCopyrightText" textColor="#88eedd" fontFace="serif" fontSize="9" />
+
+	<!-- 갤러리 type -->
+	<THEME id="galleryContainer" type="coverflow" />
+</MOML>

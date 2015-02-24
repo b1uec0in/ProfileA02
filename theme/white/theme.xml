@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.0">
+	<!-- 메인 화면-->
+	<THEME id="themeNameLabel" fontFace="/theme/white/chopinScript.ttf|serif" fontSize="50"/> 
+	<THEME id="themeTitleLabel" fontFace="/theme/white/DancingScript.ttf|serif"/>
+	<THEME id="themeBorderOverlay" defaultImg="/theme/white/border5White.png"/>
+
+	<!-- 메인 화면 날리는 개체--> <!-- 꽃모양은 rotate="true" 를 줘서 회전시킴.-->
+	<THEME id="themeFlyingObj1" defaultImg="/theme/white/flowerSmallBlue.png" layout="300,0,20,20" rotate="true"/>
+	<THEME id="themeFlyingObj2" defaultImg="/theme/white/flowerSmallGreen.png" layout="300,100,20,20" rotate="true"/>
+	<THEME id="themeFlyingObj3" defaultImg="/theme/white/flowerSmallPink.png" layout="300,200,20,20" rotate="true"/>
+
+	<!-- 하위 메뉴 화면-->
+	<THEME id="themeBg1" defaultImg="/theme/white/bg1.jpg"/> <!-- 진한 배경 -->
+	<THEME id="themeBg2" defaultImg="/theme/white/bg2.jpg"/> <!-- 옅은 배경 -->
+	<THEME id="themeTab" textColor="#775533"/>
+	<THEME id="themeInfoText" textColor="#882245"/>
+	
+	<!-- About 화면-->
+	<THEME id="themeAboutTitleText" textColor="#6677ed" fontSize="13" textShadow="#acbefe" />
+	<THEME id="themeAboutText" textColor="#9977aa" fontFace="/res/EunjinNakseo.ttf" fontSize="11"/>
+	<THEME id="themeCopyrightText" textColor="#445577" fontFace="serif" fontSize="9"/>
+	
+	<!-- 갤러리 type -->
+	<THEME id="galleryContainer" type="gallery" />
+
+</MOML>

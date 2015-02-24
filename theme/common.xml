@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.0.0">
+		<THEME id="navBack" layout="0,userVariable.sbHeight,30,30" defaultImg="/res/back.png" padding="10,0,0,0" onClick="document.container.back"/>
+		<THEME id="titleLabel" parent="themeTitleLabel" textColor="#ffffff" textShadow="#333333" defaultImg="#00000000" minFontSize="0" fontSize="22" textAlign="left|center" padding="10,0,0,0"/>
+		<THEME id="menuItem" parent="titleLabel" visible="invisible" onCreate="function.aniMenu" />
+		<THEME id="subMenuItem" parent="titleLabel" fontFace="serif" fontSize="15" visible="invisible"  />
+</MOML>

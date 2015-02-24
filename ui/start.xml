@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.6
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+	</THEMES>
+
+	<DATASOURCE id="data" src="/data/data.xml" />
+
+	<UILAYOUT portrait="300,500" landscape="300,500" theme="/theme/common.xml|theme1">
+		<NAVIGATIONCONTAINER id="navigation" layout="0,0,300,500" selectedItem="mainMenu">
+			<VIEWITEM id="mainMenu" src="mainMenu.xml">
+				<VIEWITEM id="profile" src="profile.xml" />
+				<VIEWITEM id="gallery" src="gallery.xml" transitionInEffect="slide" transitionOutEffect="slide" />
+				<VIEWITEM id="movie" src="movie.xml" />
+				<VIEWITEM id="links" src="links.xml" transitionInEffect="mosaic:random" />
+			</VIEWITEM>
+		</NAVIGATIONCONTAINER>
+		<WINDOW id="navTitleBar" layout="0,0,300,30" visible="invisible">
+			<WINDOW id="navTitleBorder" layout="0,0,300,30" visible="invisible" />
+			<LABEL id="navTitle" layout="90,0,120,30" themeId="titleLabel" />
+		</WINDOW>
+	</UILAYOUT>
+
+	<CMD cmd="function.loadData" />
+	<CMD cmd="function.calculateStatusBarOverlapSize" />
+
+	<FUNCTION id="loadData">
+		<CMD cmd="userVariable.data.name=xpath.evaluateEx('data', '/DATA/NAME/@value')" />
+		<CMD cmd="userVariable.data.menu.profile=xpath.evaluateEx('data', '/DATA/MENUS/PROFILE/@value')" />
+		<CMD cmd="userVariable.data.menu.gallery=xpath.evaluateEx('data', '/DATA/MENUS/GALLERY/@value')" />
+		<CMD cmd="userVariable.data.menu.movie=xpath.evaluateEx('data', '/DATA/MENUS/MOVIE/@value')" />
+		<CMD cmd="userVariable.data.menu.link=xpath.evaluateEx('data', '/DATA/MENUS/LINK/@value')" />
+		<CMD cmd="userVariable.data.link1.title=xpath.evaluateEx('data', '/DATA/LINK1/@title')" />
+		<CMD cmd="userVariable.data.link2.title=xpath.evaluateEx('data', '/DATA/LINK2/@title')" />
+		<CMD cmd="userVariable.data.link3.title=xpath.evaluateEx('data', '/DATA/LINK3/@title')" />
+		<CMD cmd="userVariable.data.link1.link=xpath.evaluateEx('data', '/DATA/LINK1/@link')" />
+		<CMD cmd="userVariable.data.link2.link=xpath.evaluateEx('data', '/DATA/LINK2/@link')" />
+		<CMD cmd="userVariable.data.link3.link=xpath.evaluateEx('data', '/DATA/LINK3/@link')" />
+		<CMD cmd="userVariable.data.info.tab1=xpath.evaluateEx('data', '/DATA/INFO/@tab1')" />
+		<CMD cmd="userVariable.data.info.tab2=xpath.evaluateEx('data', '/DATA/INFO/@tab2')" />
+		<CMD cmd="userVariable.data.info.tab3=xpath.evaluateEx('data', '/DATA/INFO/@tab3')" />
+		<CMD cmd="userVariable.data.gallery.tab1=xpath.evaluateEx('data', '/DATA/GALLERY/@tab1')" />
+		<CMD cmd="userVariable.data.gallery.tab2=xpath.evaluateEx('data', '/DATA/GALLERY/@tab2')" />
+		<CMD cmd="userVariable.data.gallery.tab3=xpath.evaluateEx('data', '/DATA/GALLERY/@tab3')" />
+	</FUNCTION>
+	<FUNCTION id="showNavTitle">
+		<CMD cmd="navTitleBar.visible='visible'" />
+		<CMD cmd="animation.show('navTitleBorder', 'fade', '', 500, '')" />
+		<CMD cmd="navTitle.text=userVariable.navTitle" />
+	</FUNCTION>
+	<FUNCTION id="hideNavTitle">
+		<CMD cmd="navTitleBar.visible='invisible'" />
+		<CMD cmd="navTitle.text=''" />
+	</FUNCTION>
+
+	<FUNCTION id="calculateStatusBarOverlapSize">
+		<CMD condition="device.os.platform=='iOS' &amp;&amp; math.sub(string.split(device.os.version, '.', 0), 7) &gt;= 0" cmd="userVariable.sbHeight=15" />
+		<CMD cmd="navTitleBar.top=userVariable.sbHeight" />
+	</FUNCTION>
+</MOML>

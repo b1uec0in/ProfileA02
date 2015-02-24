@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Created by ApplusForm.com on 2013.8.5
+
+	Permission is granted to copy, distribute, modify under the terms of ApplusForm License.
+
+	Copyright (C) 2014 ApplusForm.com. All rights reserved.
+-->
+<MOML version="1.1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui_1.1.5.xsd">
+	<THEMES id="theme1">
+		<THEME id="guideText" textColor="#ffffff" minFontSize="0" fontSize="13" textAlign="center" multiLine="false" />
+		<THEME id="pageNumberText" textColor="#808080" minFontSize="0" fontSize="10" textAlign="center" multiLine="false" />
+	</THEMES>
+
+	<UILAYOUT portrait="280,400" landscape="280,400" theme="theme1">
+		<COVERFLOW id="gallery1" layout="0,0,280,390" dataSource="{userVariable.galleryData}" dataList="/FILES/FILE" imagePath="@path" coverScale="100" defaultImg="#00000000" index="0"
+			onChange="function.updatePageNumber" />
+		<!--
+			<WINDOW themeId="themeBorderOverlay" layout="0,0,280,400" />
+			<BUTTON layout="250,10,30,30" text="[#]" onClick="function.wallpaper"/>
+		-->
+		<LABEL themeId="pageNumberText" id="pageNumber" layout="100,390,80,10" text="1 / {xpath.evaluateEx(userVariable.galleryData, 'count(/FILES/FILE)')}" />
+		<WINDOW layout="0,300,100,100" onClick="function.prev" />
+		<WINDOW layout="180,300,100,100" onClick="function.next" />
+
+		<WINDOW id="guideSwipe" layout="0,50,280,200" defaultImg="/res/guideSwipeScreen.png">
+			<LABEL themeId="guideText" text="좌우로 움직여 보세요" layout="0,0,280,50" />
+		</WINDOW>
+
+		<WINDOW id="guidePrev" layout="0,300,100,90" defaultImg="/res/guideBg.png">
+			<WINDOW layout="0,0,100,80" defaultImg="/res/guideLeftArrow.png" />
+			<LABEL text="이전으로 이동" themeId="guideText" layout="0,70,100,20" />
+		</WINDOW>
+		<WINDOW id="guideNext" layout="180,300,100,90" defaultImg="/res/guideBg.png">
+			<WINDOW layout="0,0,100,80" defaultImg="/res/guideRightArrow.png" />
+			<LABEL text="다음으로 이동" themeId="guideText" layout="0,70,100,20" />
+		</WINDOW>
+	</UILAYOUT>
+
+	<CMD cmd="function.guide" />
+
+	<FUNCTION id="askWallpaper">
+		<CMD cmd="userVariable.wallpaperPath=xpath.evaluateEx(userVariable.galleryData, '/FILES/FILE[' + math.add(gallery1.index,1) + ']/@path')" delay="0" />
+		<CMD condition="device.os.platform=='Android'" cmd="device.systemPopup('', '이미지를 저장 합니다.', '갤러리에 저장:function.gallery', '배경화면 지정:function.wallpaper', '취소')" />
+		<CMD condition="device.os.platform=='iOS'" cmd="device.systemPopup('', '이미지를 저장 합니다.', '사진 앨범에 저장:function.gallery', '취소', '')" />
+	</FUNCTION>
+	<FUNCTION id="wallpaper">
+		<CMD cmd="wallpaper.setWallpaper(userVariable.wallpaperPath)" />
+	</FUNCTION>
+	<FUNCTION id="gallery">
+		<CMD cmd="wallpaper.saveToGallery(userVariable.wallpaperPath, 'Profile')" />
+	</FUNCTION>
+	<FUNCTION id="guide">
+		<CMD cmd="guideSwipe.visible='invisible'" />
+		<CMD cmd="guidePrev.visible='invisible'" />
+		<CMD cmd="guideNext.visible='invisible'" />
+		<CMD condition="!userVariable.guideCoverflow" cmd="function.guideAni" />
+	</FUNCTION>
+	<FUNCTION id="guideAni">
+		<CMD cmd="userVariable.guideCoverflow='true'" />
+		<CMD cmd="animation.hide('guideSwipe', 'fade', 'roundTrip1|reverse|easeIn3', 2000, '')" delay="1500" />
+		<CMD cmd="animation.hide('guidePrev', 'fade', 'roundTrip1|reverse|easeIn3', 2000, '')" delay="2000" />
+		<CMD cmd="animation.hide('guideNext', 'fade', 'roundTrip1|reverse|easeIn3', 2000, '')" delay="2000" />
+	</FUNCTION>
+	<FUNCTION id="prev">
+		<CMD condition="math.num(gallery1.index) != 0 &amp;&amp; math.sub(gallery1.index, gallery1.offset)==0" cmd="userVariable.galleryIndex=gallery1.index, userVariable.addOffset=0, function.prevAni" />
+		<CMD cmd="animation.flyOut('guidePrev', 15, 15, 70,60, 'easeIn3', 200, '')" />
+		<CMD cmd="animation.hide('guidePrev', 'fade', '', 200, '')" />
+	</FUNCTION>
+	<FUNCTION id="prevAni">
+		<CMD cmd="userVariable.addOffset=math.add(userVariable.addOffset, -0.15)" />
+		<CMD cmd="userVariable.addOffset=math.max(userVariable.addOffset, -1)" />
+		<CMD cmd="gallery1.offset=math.add(userVariable.galleryIndex, userVariable.addOffset)" />
+		<CMD condition="userVariable.addOffset != -1" cmd="function.prevAni" delay="20" />
+	</FUNCTION>
+	<FUNCTION id="next">
+		<CMD condition="math.num(gallery1.index) != math.sub(gallery1.count, 1) &amp;&amp; math.sub(gallery1.index, gallery1.offset)==0" cmd="userVariable.galleryIndex=gallery1.index, userVariable.addOffset=0, function.nextAni" />
+		<CMD cmd="animation.flyOut('guideNext', 15, 15, 70,60, 'easeIn3', 200, '')" />
+		<CMD cmd="animation.hide('guideNext', 'fade', '', 200, '')" />
+	</FUNCTION>
+	<FUNCTION id="nextAni">
+		<CMD cmd="userVariable.addOffset=math.add(userVariable.addOffset, 0.15)" />
+		<CMD cmd="userVariable.addOffset=math.min(userVariable.addOffset, 1)" />
+		<CMD cmd="gallery1.offset=math.add(userVariable.galleryIndex, userVariable.addOffset)" />
+		<CMD condition="userVariable.addOffset != 1" cmd="function.nextAni" delay="20" />
+	</FUNCTION>
+	<FUNCTION id="updatePageNumber">
+		<CMD cmd="pageNumber.text=math.add(gallery1.index, 1) + ' / ' + gallery1.count" />
+	</FUNCTION>
+
+</MOML>
