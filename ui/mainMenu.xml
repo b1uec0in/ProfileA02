@@ -183,6 +183,7 @@
 	</FUNCTION>
 
 	<FUNCTION id="updateStatusBar">
+		<RETURN condition="not application.isObject('device.statusBar')" />
 		<CMD condition="application.themeSrc=='theme/black/theme.xml'" cmd="device.statusBar.setStatusBarStyle('light')" elseCmd="device.statusBar.setStatusBarStyle('default')" />
 	</FUNCTION>
 
