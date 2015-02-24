@@ -8,6 +8,7 @@
 -->
 <MOML>
 	<APPLICATIONINFO>
+		<NAME appFolder="ProfileA02" />
 		<START url="ui/start.xml" /> 
 		<THEME src="theme/white/theme.xml"/>
 		<ORIENTATION type="defaultPortrait" />
